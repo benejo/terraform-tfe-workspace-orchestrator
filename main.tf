@@ -30,9 +30,9 @@ resource "tfe_workspace" "main" {
     for_each = var.vcs_repo == null ? [] : ["true"]
 
     content {
-      identifier     = var.vcs_repo["identifier"]
-      oauth_token_id = var.vcs_repo["oauth_token_id"]
-      branch         = try(var.vcs_repo["branch"], "main")
+      identifier          = try(var.workspaces[split("/", each.key)[0]].vcs_repo.identifier, var.vcs_repo["identifier"])
+      oauth_token_id      = try(var.workspaces[split("/", each.key)[0]].vcs_repo.oauth_token_id, var.vcs_repo["oauth_token_id"])
+      branch              = try(var.workspaces[split("/", each.key)[0]].vcs_repo.branch, var.vcs_repo["branch"])
     }
   }
 }

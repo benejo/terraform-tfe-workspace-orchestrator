@@ -27,6 +27,9 @@ module "multi_region_deployment" {
           value = "us-east-1"
         }
       }
+      vcs_repo = {
+        branch = "dev" 
+      }
     }
     westcoast = {}
   }
