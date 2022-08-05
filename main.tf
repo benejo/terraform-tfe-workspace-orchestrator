@@ -52,7 +52,14 @@ resource "tfe_variable_set" "per_workspace" {
   name          = each.key
   description   = each.key
   organization  = var.organization
-  workspace_ids = local.workspace_ids
+}
+
+# Associate workspace specific variable set to their respective workspaces
+resource "tfe_workspace_variable_set" "per_workspace" {
+  for_each = local.individual_workspace_vars == null ? {} : tfe_workspace.main
+
+  variable_set_id = tfe_variable_set.per_workspace[split("/", each.key)[0]].id
+  workspace_id    = each.value.id
 }
 
 # create variables specified by each workspace in var.workspaces.*.vars
