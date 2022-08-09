@@ -73,21 +73,21 @@ resource "tfe_variable" "per_workspace" {
   value    = var.workspaces[split("/", each.key)[0]].vars[split("/", each.key)[1]].value
 }
 
-# create variable set for workspaces that specify their own variables
-resource "tfe_variable_set" "shared_to_all_workspaces" {
-  count = var.shared_variable_set == {} ? 0 : 1
+# # create variable set for workspaces that specify their own variables
+# resource "tfe_variable_set" "shared_to_all_workspaces" {
+#   count = var.shared_variable_set == {} ? 0 : 1
 
-  name          = "shared-to-all-workspaces"
-  description   = "shared-to-all-workspaces"
-  organization  = var.organization
-  workspace_ids = local.workspace_ids
-}
+#   name          = "shared-to-all-workspaces"
+#   description   = "shared-to-all-workspaces"
+#   organization  = var.organization
+#   workspace_ids = local.workspace_ids
+# }
 
-resource "tfe_variable" "shared_to_all_workspaces" {
-  for_each = var.shared_variable_set
+# resource "tfe_variable" "shared_to_all_workspaces" {
+#   for_each = var.shared_variable_set
 
-  variable_set_id = tfe_variable_set.shared_to_all_workspaces[0].id
-  key             = each.key
-  value           = each.value.value
-  category        = try(each.value.category, "env")
-}
+#   variable_set_id = tfe_variable_set.shared_to_all_workspaces[0].id
+#   key             = each.key
+#   value           = each.value.value
+#   category        = try(each.value.category, "env")
+# }
